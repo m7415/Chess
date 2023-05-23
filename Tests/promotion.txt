@@ -1,0 +1,11 @@
+b2b4
+h7h6
+b4b5
+g7g6
+b5b6
+f7f6
+b6c7
+h6h5
+c7d8
+Q
+/quit

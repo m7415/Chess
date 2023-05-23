@@ -1,0 +1,164 @@
+int Game::minimax(Board *position, int depth, int alpha, int beta, bool wTurn,
+                  Move *bestMove, int offset) {
+    Color c = wTurn ? White : Black;
+    if (depth == 0 || is_checkmate(c, *position)) {
+        return position->eval();
+        position->free();
+    }
+    int eval = 0;
+    vector<Move> coups;
+    if (wTurn) {
+        int max_eval = -INFINITY;
+        for (int i = 0; i < 64; i++) {
+            Piece *piece = position->get_piece(i);
+            if (piece && piece->get_couleur() == c) {
+                coups = piece->move_list(position->get_chessboard(),
+                                         numSquaresToEdge, turn + offset);
+                for (size_t j = 0; j < coups.size(); j++) {
+                    Move coup = coups[j];
+                    Board *newPos = new Board(position);
+                    if (Piece *p = newPos->make_move(coup, Normal, true,
+                                                     turn + offset, true)) {
+                        newPos->get_pieces_prises()->push_back(p);
+                    }
+                    eval = minimax(newPos, depth - 1, alpha, beta, false,
+                                   nullptr, offset + 1);
+                    newPos->free();
+                    delete newPos;
+                    if (eval > max_eval) {
+                        max_eval = eval;
+                        if (offset == 0) {
+                            *bestMove = coup;
+                        }
+                    }
+                    alpha = MAX(alpha, eval);
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+        }
+        return max_eval;
+    } else {
+        int min_eval = INFINITY;
+        for (int i = 0; i < 64; i++) {
+            Piece *piece = position->get_piece(i);
+            if (piece && piece->get_couleur() == c) {
+                coups = piece->move_list(position->get_chessboard(),
+                                         numSquaresToEdge, turn + offset);
+                for (size_t j = 0; j < coups.size(); j++) {
+                    Move coup = coups[j];
+                    Board *newPos = new Board(position);
+                    if (Piece *p = newPos->make_move(coup, Normal, true,
+                                                     turn + offset, true)) {
+                        newPos->get_pieces_prises()->push_back(p);
+                    }
+                    eval = minimax(newPos, depth - 1, alpha, beta, true,
+                                   nullptr, offset + 1);
+                    newPos->free();
+                    delete newPos;
+                    if (eval < min_eval) {
+                        min_eval = eval;
+                        if (offset == 0) {
+                            *bestMove = coup;
+                        }
+                    }
+                    beta = MIN(beta, eval);
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
+            }
+        }
+        return min_eval;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+vector<Move> Game::generer_coups(Board *position, bool wTurn, int turn_a) {
+    Color c = wTurn ? White : Black;
+    vector<Move> coups;
+    for (int i = 0; i < 64; i++) {
+        Piece *piece = position->get_piece(i);
+        if (piece && piece->get_couleur() == c) {
+            vector<Move> coups_p = piece->move_list(position->get_chessboard(),
+                                                    numSquaresToEdge, turn_a);
+            for (size_t j = 0; j < coups_p.size(); j++) {
+                coups.push_back(coups_p[j]);
+            }
+        }
+    }
+    return coups;
+}
+
+int Game::minimax(Board *position, int depth, int alpha, int beta, bool wTurn,
+                  Move *bestMove, int offset) {
+    Color c = wTurn ? White : Black;
+    if (depth == 0 || is_checkmate(c, *position)) {
+        return position->eval();
+        position->free();
+    }
+    int eval = 0;
+    if (wTurn) {
+        int max_eval = -INFINITY;
+        vector<Move> coups = generer_coups(position, wTurn, turn + offset);
+        for (int i = 0; i < coups.size(); i++) {
+            Move coup = coups[i];
+            Board *newPos = new Board(position);
+            if (Piece *p = newPos->make_move(coup, Normal, true, turn + offset,
+                                             true)) {
+                newPos->get_pieces_prises()->push_back(p);
+            }
+            eval = minimax(newPos, depth - 1, alpha, beta, false, nullptr,
+                           offset + 1);
+            newPos->free();
+            delete newPos;
+            if (eval > max_eval) {
+                max_eval = eval;
+                if (offset == 0) {
+                    *bestMove = coup;
+                }
+            }
+            alpha = MAX(alpha, eval);
+            if (beta <= alpha) {
+                break;
+            }
+        }
+        return max_eval;
+    } else {
+        int min_eval = INFINITY;
+        vector<Move> coups = generer_coups(position, wTurn, turn + offset);
+        for (int i = 0; i < coups.size(); i++) {
+            Move coup = coups[i];
+            Board *newPos = new Board(position);
+            if (Piece *p = newPos->make_move(coup, Normal, true, turn + offset,
+                                             true)) {
+                newPos->get_pieces_prises()->push_back(p);
+            }
+            eval = minimax(newPos, depth - 1, alpha, beta, false, nullptr,
+                           offset + 1);
+            newPos->free();
+            delete newPos;
+            if (eval < min_eval) {
+                min_eval = eval;
+                if (offset == 0) {
+                    *bestMove = coup;
+                }
+            }
+            alpha = MAX(alpha, eval);
+            if (beta <= alpha) {
+                break;
+            }
+        }
+        return min_eval;
+    }
+}
