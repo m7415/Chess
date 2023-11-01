@@ -4,14 +4,14 @@ LDLIBS?=-lm -ltps -lSDL2 -lSDL2_ttf
 
 INCLUDE_PATH = ./headers
 
-TARGET   = echecs
+TARGET = main
 
-SRCDIR   = src
-OBJDIR   = obj
+SRCDIR = src
+OBJDIR = obj
 
-SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
+SOURCES := $(wildcard $(SRCDIR)/*.cpp)
 INCLUDES := $(wildcard $(INCLUDE_PATH)/*.hpp)
-OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDLIBS) $^ -o $@

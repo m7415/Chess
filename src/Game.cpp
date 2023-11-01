@@ -5,21 +5,25 @@ using namespace std;
 
 // Constructeur
 
-Game::Game() : wTurn(true), check(false), turn(0), mode(-1) {
+Game::Game(int test) : wTurn(true), check(false), turn(0), mode(-1) {
     numSquaresToEdge = new int *[64];
     compute_numSquaresToEdge(numSquaresToEdge);
     cout << "Bienvenue dans une nouvelle partie de echecs 2000, les echecs du "
             "futur !"
          << endl
          << endl;
-    while (mode != 1 && mode != 2 && mode != 3 && mode != 4) {
-        cout << "Veuillez choisir parmis les options suivantes : " << endl
-             << "    ->Mode 2 joueurs : 1" << endl
-             << "    ->Mode contre l'ordinateur qui joue noir: 2" << endl
-             << "    ->Mode contre l'ordinateur qui joue blanc : 3" << endl
-             << "    ->Quitter : 4" << endl
-             << "Choix : ";
-        cin >> mode;
+    if (test == 0) {
+        while (mode != 1 && mode != 2 && mode != 3 && mode != 4) {
+            cout << "Veuillez choisir parmis les options suivantes : " << endl
+                << "    ->Mode 2 joueurs : 1" << endl
+                << "    ->Mode contre l'ordinateur qui joue noir: 2" << endl
+                << "    ->Mode contre l'ordinateur qui joue blanc : 3" << endl
+                << "    ->Quitter : 4" << endl
+                << "Choix : ";
+            cin >> mode;
+        }
+    } else {
+        mode = 1;
     }
 }
 

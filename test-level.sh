@@ -19,7 +19,7 @@ ill_games="./Tests/${level}-ill-*"
 for g in $leg_games $ill_games
 do
 	>&2 echo "* Testing ========== $g "
-	grep -v "#" $g | $CHESS_PROG > $LOG
+	grep -v "#" $g | $CHESS_PROG test > $LOG
 	# test du exit code
 	if [ $? -ne 0 ]; then
 		  echo "* [test error] $CHESS_PROG ended in error for game $g (around move $?)"

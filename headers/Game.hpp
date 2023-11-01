@@ -11,7 +11,7 @@ using namespace std;
 class Game {
   public:
     // constructeur par défaut
-    Game();
+    Game(int test);
 
     // méthode de déplacement
     bool move(Board *echiquier);
